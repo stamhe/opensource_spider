@@ -13,4 +13,7 @@ sphinx
 bind
 [bind](https://ftp.isc.org/isc/ "bind")
 ===
+vim
+[vim](http://ftp.vim.org/pub/vim/unix/ "vim")
+===
 
