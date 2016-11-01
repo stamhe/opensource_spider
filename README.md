@@ -16,4 +16,10 @@ bind
 vim
 [vim](http://ftp.vim.org/pub/vim/unix/ "vim")
 ===
+kernel
+[kernel](https://www.kernel.org/pub/linux/kernel/ "kernel")
+===
+git
+[git](https://www.kernel.org/pub/software/scm/git/ "git")
+===
 

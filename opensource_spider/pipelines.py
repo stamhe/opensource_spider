@@ -24,6 +24,10 @@ class OpensourceSpiderPipeline(object):
             file_path = self.root_dir + "/sphinx/" + os.path.dirname(item['orginname'])
         elif spider.name == 'isc_spider':
             file_path = self.root_dir + "/isc/" + os.path.dirname(item['orginname'])
+        elif spider.name == 'kernel_spider':
+            file_path = self.root_dir + "/kernel/" + os.path.dirname(item['orginname'])
+        elif spider.name == 'git_spider':
+            file_path = self.root_dir + "/git/" + os.path.dirname(item['orginname'])
         else:
             file_path = self.root_dir + "/source/" + os.path.dirname(item['orginname'])
 
