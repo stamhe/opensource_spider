@@ -24,7 +24,6 @@ class opensource_nginx_spider(CrawlSpider):
 
     # 爬取的url列表，爬虫从这里开始抓取数据，所以，第一次下载的数据将会从这些urls开始，其他子url将会从这些起始url中继承性生成
     start_urls = [
-        # 新里维多利亚 1611043078432
         'http://nginx.org/download/'
     ]
 

@@ -24,9 +24,7 @@ class opensource_lvs_spider(CrawlSpider):
 
     # 爬取的url列表，爬虫从这里开始抓取数据，所以，第一次下载的数据将会从这些urls开始，其他子url将会从这些起始url中继承性生成
     start_urls = [
-        # 新里维多利亚 1611043078432
         'http://www.linuxvirtualserver.org/software/ipvs.html',
-        #'https://www.kernel.org/pub/linux/utils/kernel/ipvsadm/',
     ]
 
     # 解析的方法，调用的时候传入从每一个url传回的response对象作为唯一参数，负责解析并获取抓取的数据(解析为item)，跟踪更多的url
