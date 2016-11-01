@@ -30,7 +30,7 @@ class opensource_git_spider(CrawlSpider):
 
     def parse_item(self, rsp):
         item = rsp.meta['item']
-        path_tmp = item['downurl'][23:]
+        path_tmp = item['downurl'][43:]
         item['orginname'] = path_tmp
         return item
 
