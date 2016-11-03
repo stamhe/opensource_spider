@@ -33,6 +33,12 @@ class OpensourceSpiderPipeline(object):
             file_path = self.root_dir + "/apache/" + os.path.dirname(item['orginname'])
         elif spider.name == 'python_spider':
             file_path = self.root_dir + "/python/" + os.path.dirname(item['orginname'])
+        elif spider.name == 'curl_spider':
+            file_path = self.root_dir + "/curl/" + os.path.dirname(item['orginname'])
+        elif spider.name == 'ffmpeg_spider':
+            file_path = self.root_dir + "/ffmpeg/" + os.path.dirname(item['orginname'])
+        elif spider.name == 'gnu_spider':
+            file_path = self.root_dir + "/gnu/" + os.path.dirname(item['orginname'])
         else:
             file_path = self.root_dir + "/source/" + os.path.dirname(item['orginname'])
 
