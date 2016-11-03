@@ -13,6 +13,7 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 from opensource_spider.items import OpensourceSpiderItem
+import uuid
 
 class opensource_nginx_spider(CrawlSpider):
     # 爬虫的识别名称，必须是唯一的，在不同的爬虫中你必须定义不同的名字

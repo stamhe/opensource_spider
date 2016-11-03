@@ -14,6 +14,7 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 from opensource_spider.items import OpensourceSpiderItem
+import uuid
 
 class opensource_kernel_spider(CrawlSpider):
     # 爬虫的识别名称，必须是唯一的，在不同的爬虫中你必须定义不同的名字
@@ -52,6 +53,6 @@ class opensource_kernel_spider(CrawlSpider):
                 item['orginname']   = v[0]
                 item['downurl']     =  response.url + v[0]
                 item['filesize']    = 0
-                yield Request(item['downurl'], meta = {'item' : item}, callback = self.parse_item)
+                yield Request(response.url + "/?t=" + str(uuid.uuid1()), meta = {'item' : item}, callback = self.parse_item)
         
 

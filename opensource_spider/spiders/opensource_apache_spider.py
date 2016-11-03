@@ -8,12 +8,14 @@ from scrapy.linkextractors import LinkExtractor
 import re
 from scrapy.spiders import CrawlSpider
 from scrapy.http import Request
+from scrapy import log
 
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 
 from opensource_spider.items import OpensourceSpiderItem
+import uuid
 
 class opensource_apache_spider(CrawlSpider):
     # 爬虫的识别名称，必须是唯一的，在不同的爬虫中你必须定义不同的名字
@@ -32,16 +34,19 @@ class opensource_apache_spider(CrawlSpider):
         item = rsp.meta['item']
         path_tmp = item['downurl'][31:]
         item['orginname'] = path_tmp
+        self.log("Be ready to download...%s"%(path_tmp))
         return item
 
 
     # 解析的方法，调用的时候传入从每一个url传回的response对象作为唯一参数，负责解析并获取抓取的数据(解析为item)，跟踪更多的url
     def parse(self, response):
-        #print "text = " , response.text
-        #sel = Selector(response)
+        #self.log("url = %s"%response.url, level = log.INFO)
         pt1 = re.compile(r'<img\ssrc="(.*?)"\salt="\[(.*?)\]">([\s]*?)<a\shref="(.*)?">(.*?)</a>([\s]*)([\d-]*)([\s]*)([\d:]*)([\s]*)([\d\w-]*)([\s]*)')
         ret1 = re.findall(pt1, response.text)
         for v in ret1:
+            #if v[3] != 'camel/' and v[3] != 'apache-camel/' and v[3] != 'apache-camel-2.8.5.tar.gz' and v[3] != '2.8.5/':
+                #continue
+
             if v[1] == 'DIR':
                 new_url = response.url + v[3]
                 yield Request(new_url, callback = self.parse)
@@ -52,6 +57,6 @@ class opensource_apache_spider(CrawlSpider):
                 item['orginname']   = v[3]
                 item['downurl']     =  response.url + v[3]
                 item['filesize']    = 0
-                yield Request(item['downurl'], meta = {'item' : item}, callback = self.parse_item)
+                yield Request(response.url + '/?t=' + str(uuid.uuid1()), meta = {'item' : item}, callback = self.parse_item)
         
 

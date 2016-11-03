@@ -55,14 +55,15 @@ class OpensourceSpiderPipeline(object):
         filesize = int(r.headers['Content-Length'])
         # 文件存在且大小与要下载的大小一致，则不再重复下载了
         if os.path.isfile(new_filename) == True and (filesize == os.path.getsize(new_filename)):
-            print "%s exists.....no need to download again"%(item['orginname'])
+            print "%s exists...no need to download again"%(item['orginname'])
             return item
 
 
+        print "%s start to download now..."%(item['orginname'])
         f = open(new_filename, 'wb')
         for chunk in r.iter_content(chunk_size = 40960):
             if chunk:
-                print "%s writing data.................."%(item['orginname'])
+                print "%s writing data..."%(item['orginname'])
                 f.write(chunk)
 
         f.close()
