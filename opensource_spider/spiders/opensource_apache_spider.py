@@ -7,6 +7,7 @@ from scrapy.selector import Selector
 from scrapy.linkextractors import LinkExtractor
 import re
 from scrapy.spiders import CrawlSpider
+from scrapy.http import Request
 
 import sys
 reload(sys)
@@ -19,40 +20,38 @@ class opensource_apache_spider(CrawlSpider):
     name = "apache_spider"    # 设置爬虫名称
 
     # 搜索的域名范围，也就是爬虫的约束区域，规定爬虫只爬取这个域名下的网页
-    # http://www.linuxvirtualserver.org/software/kernel-2.4
-    allowed_domains = ["www.linuxvirtualserver.org"] # 设置允许的域名
+    # http://archive.apache.org/dist/
+    allowed_domains = ["archive.apache.org"] # 设置允许的域名
 
     # 爬取的url列表，爬虫从这里开始抓取数据，所以，第一次下载的数据将会从这些urls开始，其他子url将会从这些起始url中继承性生成
     start_urls = [
-        # 新里维多利亚 1611043078432
-        'http://www.linuxvirtualserver.org/software/ipvs.html',
-        #'https://www.kernel.org/pub/linux/utils/kernel/ipvsadm/',
+        'http://archive.apache.org/dist/',
     ]
+
+    def parse_item(self, rsp):
+        item = rsp.meta['item']
+        path_tmp = item['downurl'][31:]
+        item['orginname'] = path_tmp
+        return item
+
 
     # 解析的方法，调用的时候传入从每一个url传回的response对象作为唯一参数，负责解析并获取抓取的数据(解析为item)，跟踪更多的url
     def parse(self, response):
-        sel = Selector(response)
-        items = []
-        if response.url == 'https://www.kernel.org/pub/linux/utils/kernel/ipvsadm/':
-            lvs_lists = sel.xpath('//a/text()').extract()
-            for lvs in lvs_lists:
-                if lvs == '../' or lvs == 'tmp/' or lvs == 'Name' or lvs == 'Last modified' or lvs == 'Description' or lvs == 'Parent Directory' or lvs == 'ChangeLog' or lvs == 'Size':
-                    continue
-
+        #print "text = " , response.text
+        #sel = Selector(response)
+        pt1 = re.compile(r'<img\ssrc="(.*?)"\salt="\[(.*?)\]">([\s]*?)<a\shref="(.*)?">(.*?)</a>([\s]*)([\d-]*)([\s]*)([\d:]*)([\s]*)([\d\w-]*)([\s]*)')
+        ret1 = re.findall(pt1, response.text)
+        for v in ret1:
+            if v[1] == 'DIR':
+                new_url = response.url + v[3]
+                yield Request(new_url, callback = self.parse)
+            elif v[1] == 'PARENTDIR':
+                continue
+            else:
                 item = OpensourceSpiderItem()
-                item['orginname']   = lvs
-                item['downurl']     = response.url + lvs
+                item['orginname']   = v[3]
+                item['downurl']     =  response.url + v[3]
                 item['filesize']    = 0
-                items.append(item)
-        else:
-            lvs_lists = sel.xpath('//div[@id="mainContent"]/ul/li/a/@href').extract()
-            for lvs in lvs_lists:
-                item = OpensourceSpiderItem()
-                item['orginname']   = lvs
-                item['downurl']     = response.url + lvs
-                item['filesize']    = 0
-                items.append(item)
-
-        return items
-
+                yield Request(item['downurl'], meta = {'item' : item}, callback = self.parse_item)
+        
 

@@ -11,7 +11,8 @@ import os
 
 class OpensourceSpiderPipeline(object):
     def __init__(self):
-        self.root_dir = '/windows/disk/work/linux/software/opensource'
+        #self.root_dir = '/windows/disk/work/linux/software/opensource'
+        self.root_dir = '/windows/epan/opensource'
         pass
     def process_item(self, item, spider):
         if spider.name == 'nginx_spider':
@@ -28,6 +29,8 @@ class OpensourceSpiderPipeline(object):
             file_path = self.root_dir + "/kernel/" + os.path.dirname(item['orginname'])
         elif spider.name == 'git_spider':
             file_path = self.root_dir + "/git/" + os.path.dirname(item['orginname'])
+        elif spider.name == 'apache_spider':
+            file_path = self.root_dir + "/apache/" + os.path.dirname(item['orginname'])
         else:
             file_path = self.root_dir + "/source/" + os.path.dirname(item['orginname'])
 

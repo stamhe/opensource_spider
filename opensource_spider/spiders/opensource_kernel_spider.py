@@ -20,12 +20,12 @@ class opensource_kernel_spider(CrawlSpider):
     name = "kernel_spider"    # 设置爬虫名称
 
     # 搜索的域名范围，也就是爬虫的约束区域，规定爬虫只爬取这个域名下的网页
-    # https://www.kernel.org/pub/linux/kernel/
-    allowed_domains = ["www.kernel.org"] # 设置允许的域名
+    # http://mirrors.aliyun.com/linux-kernel/
+    allowed_domains = ["mirrors.aliyun.com"] # 设置允许的域名
 
     # 爬取的url列表，爬虫从这里开始抓取数据，所以，第一次下载的数据将会从这些urls开始，其他子url将会从这些起始url中继承性生成
     start_urls = [
-        'https://www.kernel.org/pub/linux/kernel/'
+        'http://mirrors.aliyun.com/linux-kernel/',
     ]
 
     def parse_item(self, rsp):
