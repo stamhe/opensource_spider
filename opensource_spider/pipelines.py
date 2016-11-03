@@ -31,6 +31,8 @@ class OpensourceSpiderPipeline(object):
             file_path = self.root_dir + "/git/" + os.path.dirname(item['orginname'])
         elif spider.name == 'apache_spider':
             file_path = self.root_dir + "/apache/" + os.path.dirname(item['orginname'])
+        elif spider.name == 'python_spider':
+            file_path = self.root_dir + "/python/" + os.path.dirname(item['orginname'])
         else:
             file_path = self.root_dir + "/source/" + os.path.dirname(item['orginname'])
 
@@ -61,10 +63,13 @@ class OpensourceSpiderPipeline(object):
 
         print "%s start to download now..."%(item['orginname'])
         f = open(new_filename, 'wb')
-        for chunk in r.iter_content(chunk_size = 40960):
+        ck_size=40960
+        ck_count=0
+        for chunk in r.iter_content(chunk_size = ck_size):
             if chunk:
-                print "%s writing data..."%(item['orginname'])
                 f.write(chunk)
+                ck_count = ck_count + 1
+                print "%s writing data...filesize = %d pos = %d"%(item['orginname'], filesize, ck_size * ck_count)
 
         f.close()
         if os.path.getsize(new_filename) == filesize:
