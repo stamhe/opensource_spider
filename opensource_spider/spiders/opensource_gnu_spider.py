@@ -53,6 +53,6 @@ class opensource_gnu_spider(CrawlSpider):
                 item['orginname']   = v[2]
                 item['downurl']     =  response.url + v[2]
                 item['filesize']    = 0
-                yield Request(response.url + "/?t=" + str(uuid.uuid1()), meta = {'item' : item}, callback = self.parse_item)
+                yield Request(response.url + "?t=" + str(uuid.uuid1()), meta = {'item' : item}, callback = self.parse_item)
         
 
